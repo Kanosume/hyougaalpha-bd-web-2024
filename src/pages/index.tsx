@@ -94,9 +94,9 @@ export default function Page() {
     },
     {
       id: "8d3ab3b5-769d-4ab5-b06e-003bf8f2ad3a",
-      name: "unknown",
-      url: "",
-      imgURL: "/img/banner/Unknown.png",
+      name: "hagaalphyou2211",
+      url: "https://x.com/hagaalphyou2211",
+      imgURL: "/img/banner/CK-banner.png",
       order: 6
     }
   ]
