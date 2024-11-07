@@ -28,7 +28,7 @@ import { PorkTop } from '@/svg/badge/top/porkT';
 import { PorkBottom } from '@/svg/badge/bottom/porkB';
 import { CpuTop } from '@/svg/badge/top/cpuT';
 import { CpuBottom } from '@/svg/badge/bottom/cpuB';
-export const runtime = "edge";
+
 
 //
 

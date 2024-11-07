@@ -7,7 +7,7 @@ import { Divider } from "@mui/material";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFacebook, faTiktok } from '@fortawesome/free-brands-svg-icons';
 import { Logo } from "@/svg/Logo";
-export const runtime = "edge";
+
 export default function Page500() {
     return <div className="flex flex-col relative w-full h-screen justify-center items-center overflow-hidden gap-4">
         <div className="text-white text-4xl z-10 w-full text-center">ขออภัย คุณไม่พบหน้าอะไร...นอกจากคุณ<b className='text-[#ab98ff] underline'>คุณบากุ</b></div>
