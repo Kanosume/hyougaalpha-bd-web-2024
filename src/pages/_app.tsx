@@ -2,7 +2,7 @@ import '@/styles/globals.css'
 import { StyledEngineProvider, ThemeProvider, createTheme } from '@mui/material'
 import type { AppProps } from 'next/app'
 import Head from 'next/head';
-
+export const runtime = "edge";
 const rootElement = () => document.getElementById("__next");
 
 const theme = createTheme({
