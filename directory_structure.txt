@@ -1,0 +1,122 @@
+├── .git
+│   ├── FETCH_HEAD
+│   ├── HEAD
+│   ├── branches
+│   ├── config
+│   ├── description
+│   ├── hooks
+│   │   ├── applypatch-msg.sample
+│   │   ├── commit-msg.sample
+│   │   ├── fsmonitor-watchman.sample
+│   │   ├── post-update.sample
+│   │   ├── pre-applypatch.sample
+│   │   ├── pre-commit.sample
+│   │   ├── pre-merge-commit.sample
+│   │   ├── pre-push.sample
+│   │   ├── pre-rebase.sample
+│   │   ├── pre-receive.sample
+│   │   ├── prepare-commit-msg.sample
+│   │   ├── push-to-checkout.sample
+│   │   ├── sendemail-validate.sample
+│   │   └── update.sample
+│   ├── index
+│   ├── info
+│   │   └── exclude
+│   ├── lfs
+│   │   └── tmp
+│   ├── logs
+│   │   ├── HEAD
+│   │   └── refs
+│   │       ├── heads
+│   │       │   └── main
+│   │       └── remotes
+│   │           └── origin
+│   │               └── HEAD
+│   ├── objects
+│   │   ├── info
+│   │   └── pack
+│   │       ├── pack-6f72a9d129a2b32b764062c6d2be911f4c8e64bc.idx
+│   │       ├── pack-6f72a9d129a2b32b764062c6d2be911f4c8e64bc.pack
+│   │       ├── pack-6f72a9d129a2b32b764062c6d2be911f4c8e64bc.rev
+│   │       ├── pack-be9ea380c0938ea59e2708198744067c7e0c6c09.idx
+│   │       ├── pack-be9ea380c0938ea59e2708198744067c7e0c6c09.pack
+│   │       └── pack-be9ea380c0938ea59e2708198744067c7e0c6c09.rev
+│   ├── packed-refs
+│   └── refs
+│       ├── heads
+│       │   └── main
+│       ├── remotes
+│       │   └── origin
+│       │       └── HEAD
+│       └── tags
+├── .gitignore
+├── README.md
+├── directory_structure.txt
+├── next.config.js
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── public
+│   ├── favicon.ico
+│   ├── img
+│   │   ├── Bottom number
+│   │   │   ├── Green.png
+│   │   │   ├── Red.png
+│   │   │   ├── blue.png
+│   │   │   ├── brown.png
+│   │   │   └── yellow.png
+│   │   ├── RedScreen.png
+│   │   ├── Sticker
+│   │   │   ├── Cocoa.png
+│   │   │   ├── Grilled pork.png
+│   │   │   ├── Manju.png
+│   │   │   ├── PC RGB.png
+│   │   │   └── Star.png
+│   │   ├── banner
+│   │   │   ├── BloomingCat_Banner.png
+│   │   │   ├── CK-banner.png
+│   │   │   ├── TapeTheCats.png
+│   │   │   ├── Unknown.png
+│   │   │   ├── birthday-good.png
+│   │   │   ├── cafe.png
+│   │   │   └── hyouvember.jpg
+│   │   └── logo_arp.png
+│   ├── post copy.json
+│   └── post.json
+├── src
+│   ├── firebase
+│   │   ├── config.ts
+│   │   └── operations.ts
+│   ├── pages
+│   │   ├── 404.tsx
+│   │   ├── 500.tsx
+│   │   ├── _app.tsx
+│   │   ├── _document.tsx
+│   │   └── index.tsx
+│   ├── styles
+│   │   └── globals.css
+│   ├── svg
+│   │   ├── Badge.tsx
+│   │   ├── LeftNav.tsx
+│   │   ├── Logo.tsx
+│   │   ├── RightNav.tsx
+│   │   └── badge
+│   │       ├── body.tsx
+│   │       ├── bottom
+│   │       │   ├── cocoaB.tsx
+│   │       │   ├── cpuB.tsx
+│   │       │   ├── momijiB.tsx
+│   │       │   ├── porkB.tsx
+│   │       │   └── starB.tsx
+│   │       └── top
+│   │           ├── cocoaT.tsx
+│   │           ├── cpuT.tsx
+│   │           ├── momijiT.tsx
+│   │           ├── porkT.tsx
+│   │           └── starT.tsx
+│   └── types
+│       └── next-auth.d.ts
+├── tailwind.config.js
+├── test.js
+├── tsconfig.json
+└── yarn.lock
