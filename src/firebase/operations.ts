@@ -1,5 +1,7 @@
-import { db } from './config';
-import { ref, push, get, serverTimestamp, DataSnapshot } from 'firebase/database';
+import * as admin from 'firebase-admin';
+import { getDatabase, ref, push, get, serverTimestamp, DataSnapshot } from 'firebase-admin/database';
+
+const db = getDatabase();
 
 export interface Gift {
     id: string;
