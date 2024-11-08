@@ -1,5 +1,4 @@
 import * as admin from 'firebase-admin';
-import { getDatabase, ref, push, get, serverTimestamp, DataSnapshot } from 'firebase-admin/database';
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY as string);
 
@@ -10,7 +9,7 @@ if (admin.apps.length === 0) {
   });
 }
 
-const db = getDatabase();
+const db = admin.database();
 
 export interface Gift {
     id: string;
@@ -106,16 +105,16 @@ export const writePost = async (
         throw new Error(`Invalid giftId: ${giftId}`);
     }
 
-    const postsRef = ref(db, 'posts');  
+    const postsRef = db.ref('posts');
     const postData: Omit<RawPost, 'createdAt'> & { createdAt: any } = {
         name: name.trim(),
         comment: comment.trim(),
         giftId,
-        createdAt: serverTimestamp(),
+        createdAt: admin.database.ServerValue.TIMESTAMP,
     };
 
     try {
-        const newPostRef = await push(postsRef, postData);
+        const newPostRef = await postsRef.push(postData);
         if (!newPostRef.key) {
             throw new Error('Failed to generate post key');
         }
@@ -127,14 +126,14 @@ export const writePost = async (
 };
 
 export const getPosts = async (): Promise<{ data: Post[]; total: number }> => {
-    const postsRef = ref(db, 'posts');  
+    const postsRef = db.ref('posts');
 
     try {
-        const snapshot = await get(postsRef);
+        const snapshot = await postsRef.once('value');
         const posts: Post[] = [];
 
         if (snapshot.exists()) {
-            snapshot.forEach((childSnapshot: DataSnapshot) => {
+            snapshot.forEach((childSnapshot) => {
                 const rawPost = childSnapshot.val();
                 if (!isValidRawPost(rawPost)) {
                     console.warn(`Invalid post data for key ${childSnapshot.key}:`, rawPost);
