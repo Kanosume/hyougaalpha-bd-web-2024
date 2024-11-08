@@ -11,7 +11,7 @@ const firebaseConfig = {
   appId: process.env.FIREBASE_APP_ID
 };
 
-if (!firebase.apps.length) {
+if (!firebase.getApps().length) {
   firebase.initializeApp(firebaseConfig);
 } else {
   firebase.app(); // if already initialized, use that one
