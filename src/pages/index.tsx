@@ -93,10 +93,17 @@ export default function Page() {
       order: 5
     },
     {
-      id: "8d3ab3b5-769d-4ab5-b06e-003bf8f2ad3a",
+      id: "8d3ab3b5-769d-4ab5-b06e-073bf8f2ad3a",
       name: "hagaalphyou2211",
       url: "https://x.com/hagaalphyou2211",
       imgURL: "/img/banner/CK-banner.png",
+      order: 6
+    },
+    {
+      id: "8d3ab3b5-769d-4ab5-b06e-003bf8f2ad3a",
+      name: "unknown",
+      url: "",
+      imgURL: "/img/banner/Unknown.png",
       order: 6
     }
   ]
