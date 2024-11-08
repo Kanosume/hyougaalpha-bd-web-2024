@@ -1,6 +1,15 @@
 import * as admin from 'firebase-admin';
 import { getDatabase, ref, push, get, serverTimestamp, DataSnapshot } from 'firebase-admin/database';
 
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY as string);
+
+if (admin.apps.length === 0) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: process.env.FIREBASE_DATABASE_URL
+  });
+}
+
 const db = getDatabase();
 
 export interface Gift {
