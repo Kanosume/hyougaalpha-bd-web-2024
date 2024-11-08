@@ -15,7 +15,15 @@ const nextConfig = {
         ]
       }
     ];
-  }
+  },
+  webpack: (config) => {
+    config.experiments = {
+      asyncWebAssembly: true,
+      // or use syncWebAssembly for synchronous WebAssembly support
+      // syncWebAssembly: true,
+    };
+    return config;
+  },
 };
 
 module.exports = nextConfig;
