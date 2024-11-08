@@ -43,11 +43,21 @@
     "swiper": "^11.1.14",
     "swr": "^2.2.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "@firebase/app": "^0.10.0",
+    "@firebase/app-types": "^0.10.0"
   },
   "devDependencies": {
     "@types/gtag.js": "^0.0.20",
     "tailwindcss": "^3.4.14",
-    "vercel": "^37.14.0"
+    "vercel": "^37.14.0",
+    "debug": "^4.3.1",
+    "uuid": "^7.0.0",
+    "npmlog": "^6.0.0",
+    "glob": "^9.0.0",
+    "inflight": "^2.0.0",
+    "are-we-there-yet": "^3.0.0",
+    "rimraf": "^4.0.0",
+    "gauge": "^4.0.0"
   }
 }
