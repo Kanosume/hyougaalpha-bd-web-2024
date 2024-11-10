@@ -229,8 +229,13 @@ const handleSubmit = async () => {
     const updatedPosts = await writePost(userName, userComment, selectedImageId.toString());
     setPostData(updatedPosts);
     handleCloseModal();
-  } catch (error) {
-    console.error('Error submitting post:', error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      setPostError(error.message);
+    } else {
+      setPostError(String(error));
+    }
+    setPostIsLoading(false);
   }
 };
 
