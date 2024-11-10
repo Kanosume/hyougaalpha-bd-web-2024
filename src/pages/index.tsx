@@ -183,7 +183,7 @@ export default function Page() {
   const [now, setNow] = useState(DateTime.now())
   const [openEye, setOpenEye] = useState(true)
   const [isModalOpen, setModalOpen] = useState(false)
-  const [selectedImageId, setSelectedImageId] = useState(null)
+  const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
   const [userName, setUserName] = useState('')
   const userNameRef = useRef<HTMLTextAreaElement>(null);
   const [userComment, setUserComment] = useState('')
@@ -212,27 +212,27 @@ export default function Page() {
     setSelectedImageId(null)
   }
 
-  const handleSubmit = async () => {
-    if (userName === "" && userNameRef.current) {
-      userNameRef.current.focus()
-      return
-    }
-    if (userComment === "" && userCommentRef.current) {
-      userCommentRef.current.focus()
-      return
-    }
-    if (!selectedImageId) {
-      return
-    }
-
-    try {
-      const updatedPosts = await writePost(userName, userComment, selectedImageId.toString())
-      setPostData(updatedPosts)
-      handleCloseModal()
-    } catch (error) {
-      console.error('Error submitting post:', error)
-    }
+const handleSubmit = async () => {
+  if (userName === "" && userNameRef.current) {
+    userNameRef.current.focus();
+    return;
   }
+  if (userComment === "" && userCommentRef.current) {
+    userCommentRef.current.focus();
+    return;
+  }
+  if (selectedImageId === null) {
+    return;
+  }
+
+  try {
+    const updatedPosts = await writePost(userName, userComment, selectedImageId.toString());
+    setPostData(updatedPosts);
+    handleCloseModal();
+  } catch (error) {
+    console.error('Error submitting post:', error);
+  }
+};
 
   const handleResize = () => {
     setDimensions({
