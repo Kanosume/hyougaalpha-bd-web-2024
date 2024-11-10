@@ -94,6 +94,11 @@ export const writePost = async (
         throw new Error(`Invalid giftId: ${giftId}`);
     }
 
+    // Check if we're in build/SSG mode
+    if (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build') {
+        return 'build-time-id';
+    }
+
     const postData = {
         name: name.trim(),
         comment: comment.trim(),
@@ -119,6 +124,11 @@ export const writePost = async (
 };
 
 export const getPosts = async (): Promise<{ data: Post[]; total: number }> => {
+    // During build time, return empty array
+    if (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build') {
+        return { data: [], total: 0 };
+    }
+
     try {
         const { data: posts, error } = await supabase
             .from('posts')
@@ -153,4 +163,9 @@ export const getPosts = async (): Promise<{ data: Post[]; total: number }> => {
         console.error('Error getting posts:', error);
         throw error;
     }
+};
+
+export default {
+    writePost,
+    getPosts,
 };
