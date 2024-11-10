@@ -248,7 +248,7 @@ export default function Page() {
   const [postData, setPostData] = useState<PostData>(initialData);
   const [postError, setPostError] = useState<string>('');
   const [postIsLoading, setPostIsLoading] = useState<boolean>(true);
-
+  const [postIsValidating, setPostIsValidating] = useState<boolean>(false);
   // Refs
   const userNameRef = useRef<HTMLTextAreaElement>(null);
   const userCommentRef = useRef<HTMLTextAreaElement>(null);
