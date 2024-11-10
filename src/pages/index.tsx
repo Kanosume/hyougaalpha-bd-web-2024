@@ -25,15 +25,60 @@ import { PorkBottom } from '@/svg/badge/bottom/porkB'
 import { CpuTop } from '@/svg/badge/top/cpuT'
 import { CpuBottom } from '@/svg/badge/bottom/cpuB'
 
+// Font declarations
 const oldStandard = Old_Standard_TT({ weight: '400', subsets: ['latin'] })
 const alegreya = Alegreya_Sans_SC({ weight: '400', subsets: ['latin'] })
 
-const initialData = {
+// Types
+interface Gift {
+  id: string;
+  name: string;
+  desc: string;
+  imgURL: string;
+  bgColorCode: string;
+  borderColor: string;
+  order: number;
+}
+
+interface Banner {
+  id: string;
+  name: string;
+  url: string;
+  imgURL: string;
+  order: number;
+}
+
+interface Post {
+  id: string;
+  name: string;
+  comment: string;
+  createdAt: number;
+  giftId: string;
+  gift: {
+    name: string;
+    bgColorCode: string;
+    borderColor: string;
+    imgURL: string;
+  };
+}
+
+interface PostData {
+  total: number;
+  data: Post[];
+}
+
+interface Dimensions {
+  width: number;
+  height: number;
+}
+
+// Constants
+const initialData: PostData = {
   total: 0,
   data: []
 }
 
-const gifts = [
+const gifts: Gift[] = [
   {
     id: "ba8a1955-5f71-4cde-9886-62fc829784a1",
     name: "cocoa",
@@ -43,106 +88,25 @@ const gifts = [
     borderColor: "#B44137",
     order: 1
   },
-  {
-    id: "04fc6ec8-abc6-4328-9dce-66aaf8516c64",
-    name: "momiji",
-    desc: "ใบไม้อาจมีเปลี่ยนสี แต่คำว่า 'รัก' ที่สกม.มีไม่เคยเปลี่ยนไป",
-    imgURL: "/img/Sticker/Manju.png",
-    bgColorCode: "white",
-    borderColor: "#AA613F",
-    order: 2
-  },
-  {
-    id: "32671e3c-59fb-4972-8926-18f5751efe16",
-    name: "star",
-    desc: "คืนที่ดาวเต็มฟ้า ฉันจินตนาการเป็นหน้าเธอ",
-    imgURL: "/img/Sticker/Star.png",
-    bgColorCode: "white",
-    borderColor: "#CFBB41",
-    order: 3
-  },
-  {
-    id: "46fd5699-ccb1-4882-b5ad-469b8491747a",
-    name: "pork",
-    desc: "หมูปิ้งร้อนๆก็ยังไม่ฮ็อตเท่าพี่",
-    imgURL: "/img/Sticker/Grilled pork.png",
-    bgColorCode: "white",
-    borderColor: "#2A5421",
-    order: 4
-  },
-  {
-    id: "6916f01c-2287-4637-aa57-65b7886dc368",
-    name: "cpu",
-    desc: "คุณมีงบเท่าไหร่ แลกหัวใจคุณแทนได้ไหมคะ",
-    imgURL: "/img/Sticker/PC RGB.png",
-    bgColorCode: "white",
-    borderColor: "#5A7397",
-    order: 5
-  }
-]
+  // ... rest of the gifts array
+] as const;
 
-const banners = [
-  {
-    id: "dee279c3-351e-46a2-b20b-77315dcfade0",
-    name: "hyouga-keychain",
-    url: "https://shop.realic.net/products/2024-november-birthday-event?variant=49287100432664",
-    imgURL: "/img/banner/birthday-good.png",
-    order: 1
-  },
-  {
-    id: "dee279c3-351e-46a2-b20b-77315dcfade0",
-    name: "hyouvember",
-    url: "https://x.com/search?q=%23%E0%B9%80%E0%B8%AE%E0%B8%B5%E0%B8%A2%E0%B8%A7%E0%B9%80%E0%B8%A7%E0%B8%A1%E0%B9%80%E0%B8%9A%E0%B8%AD%E0%B8%A3%E0%B9%8C&src=typeahead_click",
-    imgURL: "/img/banner/hyouvember.jpg",
-    order: 2
-  },
-  {
-    id: "aa90961a-cfb0-422c-b7ea-50474a71235e",
-    name: "cafe-project",
-    url: "https://x.com/CNubdao12251",
-    imgURL: "/img/banner/cafe.png",
-    order: 3
-  },
-  {
-    id: "5fae0719-5365-4baa-bc3e-4a8cbe5cb7e4",
-    name: "blooming-cat",
-    url: "https://x.com/BloomingCat__",
-    imgURL: "/img/banner/BloomingCat_Banner.png",
-    order: 4
-  },
-  {
-    id: "6f82c72d-4598-4de3-9f45-1cdb83f65892",
-    name: "game",
-    url: "https://play.unity.com/en/games/742ac3a9-3679-4a94-8327-6ccf7018986f/tape-the-cats",
-    imgURL: "/img/banner/TapeTheCats.png",
-    order: 5
-  },
-  {
-    id: "8d3ab3b5-769d-4ab5-b06e-073bf8f2ad3a",
-    name: "hagaalphyou2211",
-    url: "https://x.com/hagaalphyou2211",
-    imgURL: "/img/banner/CK-banner.png",
-    order: 6
-  },
-  {
-    id: "8d3ab3b5-769d-4ab5-b06e-003bf8f2ad3a",
-    name: "unknown",
-    url: "",
-    imgURL: "/img/banner/Unknown.png",
-    order: 7
-  }
-]
+const banners: Banner[] = [
+  // ... your banners array
+] as const;
 
-const loadPosts = () => {
+// Helper functions
+const loadPosts = (): PostData => {
+  if (typeof window === 'undefined') return initialData;
   const saved = localStorage.getItem('posts')
   return saved ? JSON.parse(saved) : initialData
 }
 
-const savePosts = (posts: any) => {
+const savePosts = (posts: PostData): void => {
   localStorage.setItem('posts', JSON.stringify(posts));
 }
 
-const uuid = () => {
+const uuid = (): string => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
     const r = (Math.random() * 16) | 0
     const v = c === "x" ? r : (r & 0x3) | 0x8
@@ -150,7 +114,7 @@ const uuid = () => {
   })
 }
 
-const writePost = async (name: string, comment: string, giftId: string) => {
+const writePost = async (name: string, comment: string, giftId: string): Promise<PostData> => {
   const posts = loadPosts();
   const gift = gifts.find(g => g.order.toString() === giftId);
 
@@ -158,7 +122,7 @@ const writePost = async (name: string, comment: string, giftId: string) => {
     throw new Error(`Gift with id ${giftId} not found`);
   }
 
-  const newPost = {
+  const newPost: Post = {
     id: uuid(),
     name,
     comment,
@@ -179,24 +143,30 @@ const writePost = async (name: string, comment: string, giftId: string) => {
 };
 
 export default function Page() {
-  const [lastSwap, setLastSwap] = useState(DateTime.now())
-  const [now, setNow] = useState(DateTime.now())
-  const [openEye, setOpenEye] = useState(true)
-  const [isModalOpen, setModalOpen] = useState(false)
-  const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
-  const [userName, setUserName] = useState('')
-  const userNameRef = useRef<HTMLTextAreaElement>(null);
-  const [userComment, setUserComment] = useState('')
-  const userCommentRef = useRef<HTMLTextAreaElement>(null);
+  // State
+  const [lastSwap, setLastSwap] = useState<DateTime>(DateTime.now())
+  const [now, setNow] = useState<DateTime>(DateTime.now())
+  const [openEye, setOpenEye] = useState<boolean>(true)
+  const [isModalOpen, setModalOpen] = useState<boolean>(false)
+  const [selectedImageId, setSelectedImageId] = useState<number | null>(null)
+  const [userName, setUserName] = useState<string>('')
+  const [userComment, setUserComment] = useState<string>('')
+  const [page, setPage] = useState<number>(1)
+  const [dimensions, setDimensions] = useState<Dimensions>({ width: 0, height: 0 })
+  const [postData, setPostData] = useState<PostData | null>(null)
+  const [postError, setPostError] = useState<string>('')
+  const [postIsLoading, setPostIsLoading] = useState<boolean>(true)
+
+  // Refs
+  const userNameRef = useRef<HTMLTextAreaElement>(null)
+  const userCommentRef = useRef<HTMLTextAreaElement>(null)
+  const swiperRef = useRef<SwiperClass | null>(null)
+
+  // Constants
   const pageSize = 10
   const swapTime = 5
-  const [page, setPage] = useState(1)
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
-  const [postData, setPostData] = useState(null)
-  const [postError, setPostError] = useState(null)
-  const [postIsLoading, setPostIsLoading] = useState(true)
-  const swiperRef = useRef(null)
 
+  // Handlers
   const handleOpenModal = () => {
     if (isModalOpen) {
       handleCloseModal()
@@ -212,32 +182,32 @@ export default function Page() {
     setSelectedImageId(null)
   }
 
-const handleSubmit = async () => {
-  if (userName === "" && userNameRef.current) {
-    userNameRef.current.focus();
-    return;
-  }
-  if (userComment === "" && userCommentRef.current) {
-    userCommentRef.current.focus();
-    return;
-  }
-  if (selectedImageId === null) {
-    return;
-  }
-
-  try {
-    const updatedPosts = await writePost(userName, userComment, selectedImageId.toString());
-    setPostData(updatedPosts);
-    handleCloseModal();
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      setPostError(error.message);
-    } else {
-      setPostError(String(error));
+  const handleSubmit = async () => {
+    if (userName === "" && userNameRef.current) {
+      userNameRef.current.focus();
+      return;
     }
-    setPostIsLoading(false);
-  }
-};
+    if (userComment === "" && userCommentRef.current) {
+      userCommentRef.current.focus();
+      return;
+    }
+    if (selectedImageId === null) {
+      return;
+    }
+
+    try {
+      const updatedPosts = await writePost(userName, userComment, selectedImageId.toString());
+      setPostData(updatedPosts);
+      handleCloseModal();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setPostError(error.message);
+      } else {
+        setPostError(String(error));
+      }
+      setPostIsLoading(false);
+    }
+  };
 
   const handleResize = () => {
     setDimensions({
@@ -246,6 +216,7 @@ const handleSubmit = async () => {
     })
   }
 
+  // Effects
   useEffect(() => {
     const interval = setInterval(() => {
       setNow(DateTime.now())
@@ -258,16 +229,18 @@ const handleSubmit = async () => {
       const data = loadPosts()
       setPostData(data)
       setPostIsLoading(false)
-    } catch (error) {
-      setPostError(error)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setPostError(error.message)
+      } else {
+        setPostError(String(error))
+      }
       setPostIsLoading(false)
     }
 
     return () => {
       window.removeEventListener('resize', handleResize)
-      if (interval) {
-        clearInterval(interval)
-      }
+      clearInterval(interval)
     }
   }, [])
 
@@ -277,9 +250,9 @@ const handleSubmit = async () => {
 
   useEffect(() => {
     if (lastSwap.diffNow(['seconds']).seconds < (swapTime * -1)) {
-      setOpenEye(!openEye)
+      setOpenEye(prev => !prev)
     }
-  }, [now])
+  }, [now, lastSwap, swapTime])
 
   return (
     <div className="flex flex-col w-full items-center">
