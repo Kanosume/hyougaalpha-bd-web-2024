@@ -250,7 +250,7 @@ export default function Page() {
   const [postIsLoading, setPostIsLoading] = useState<boolean>(true);
 
   // Refs
-  const userNameRef = useRef<HTMLInputElement>(null);
+  const userNameRef = useRef<HTMLTextAreaElement>(null);
   const userCommentRef = useRef<HTMLTextAreaElement>(null);
   const swiperRef = useRef<SwiperClass | null>(null);
 
@@ -522,20 +522,17 @@ export default function Page() {
                       <div className="writing-name">
                         <h2>แปะชื่อ</h2>
                         <div className="writing-name-textarea"></div>
-                        <textarea
-                          rows={1}
-                          cols={29}
-                          placeholder="Write your name here..."
-                          ref={userNameRef}
-                          value={userName}
-                          onChange={(e) => setUserName(e.target.value)}
-                          style={{
-                            borderColor:
-                              selectedImageId === gift.order
-                                ? gift.borderColor
-                                : "black",
-                          }}
-                        />
+<textarea
+    rows={1}
+    cols={29}
+    placeholder="Write your name here..."
+    ref={userNameRef}
+    value={userName}
+    onChange={(e) => setUserName(e.target.value)}
+    style={{
+        borderColor: selectedImageId === gift.order ? gift.borderColor : "black",
+    }}
+/>
                       </div>
                       <div className="writing-comment">
                         <h2>แปะคำอวยพร</h2>
