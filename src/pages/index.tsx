@@ -138,8 +138,8 @@ const loadPosts = () => {
   return saved ? JSON.parse(saved) : initialData
 }
 
-const savePosts = (posts) => {
-  localStorage.setItem('posts', JSON.stringify(posts))
+const savePosts = (posts: any) => {
+  localStorage.setItem('posts', JSON.stringify(posts));
 }
 
 const uuid = () => {
