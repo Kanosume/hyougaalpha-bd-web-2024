@@ -1,0 +1,12 @@
+[build]
+  command = "npm run build"
+  dir = "out"  # This is where your static files will be generated after build
+
+[workers.dev]
+  route = "/*"
+
+[[headers]]
+  path = "/*"
+  headers = [
+    { key = "ngrok-skip-browser-warning", value = "true" }
+  ]
