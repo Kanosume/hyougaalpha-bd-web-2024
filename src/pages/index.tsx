@@ -154,6 +154,10 @@ const writePost = async (name: string, comment: string, giftId: string) => {
   const posts = loadPosts();
   const gift = gifts.find(g => g.order.toString() === giftId);
 
+  if (!gift) {
+    throw new Error(`Gift with id ${giftId} not found`);
+  }
+
   const newPost = {
     id: uuid(),
     name,
