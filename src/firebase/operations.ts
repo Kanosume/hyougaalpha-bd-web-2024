@@ -138,7 +138,7 @@ export const getPosts = async (): Promise<{ data: Post[]; total: number }> => {
         if (error) throw error;
         if (!posts) return { data: [], total: 0 };
 
-        const formattedPosts: Post[] = posts.map(post => {
+        const formattedPosts: Post[] = posts.map((post: any) => {
             const gift = giftMap[post.gift_id];
             if (!gift) {
                 console.warn(`Invalid giftId ${post.gift_id} for post ${post.id}`);
