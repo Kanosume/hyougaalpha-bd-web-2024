@@ -11,7 +11,7 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBluesky, faFacebook, faInstagram, faTwitch } from '@fortawesome/free-brands-svg-icons';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
-import { getPosts, writePost } from '@/firebase/operations';
+import { getPosts, writePost } from '@/supabase/operations';
 // import { Logo } from '@/svg/Logo';
 
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
