@@ -1,15 +1,4 @@
-import * as admin from 'firebase-admin';
-
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY as string);
-
-if (admin.apps.length === 0) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: process.env.FIREBASE_DATABASE_URL
-  });
-}
-
-const db = admin.database();
+import { supabase } from './config';
 
 export interface Gift {
     id: string;
@@ -105,20 +94,24 @@ export const writePost = async (
         throw new Error(`Invalid giftId: ${giftId}`);
     }
 
-    const postsRef = db.ref('posts');
-    const postData: Omit<RawPost, 'createdAt'> & { createdAt: any } = {
+    const postData = {
         name: name.trim(),
         comment: comment.trim(),
-        giftId,
-        createdAt: admin.database.ServerValue.TIMESTAMP,
+        gift_id: giftId,
+        created_at: Math.floor(Date.now()),
     };
 
     try {
-        const newPostRef = await postsRef.push(postData);
-        if (!newPostRef.key) {
-            throw new Error('Failed to generate post key');
-        }
-        return newPostRef.key;
+        const { data, error } = await supabase
+            .from('posts')
+            .insert(postData)
+            .select('id')
+            .single();
+
+        if (error) throw error;
+        if (!data) throw new Error('No data returned from insert');
+        
+        return data.id;
     } catch (error) {
         console.error('Error writing post:', error);
         throw error;
@@ -126,48 +119,35 @@ export const writePost = async (
 };
 
 export const getPosts = async (): Promise<{ data: Post[]; total: number }> => {
-    const postsRef = db.ref('posts');
-
     try {
-        const snapshot = await postsRef.once('value');
-        const posts: Post[] = [];
+        const { data: posts, error } = await supabase
+            .from('posts')
+            .select('*')
+            .order('created_at', { ascending: false });
 
-        if (snapshot.exists()) {
-            snapshot.forEach((childSnapshot) => {
-                const rawPost = childSnapshot.val();
-                if (!isValidRawPost(rawPost)) {
-                    console.warn(`Invalid post data for key ${childSnapshot.key}:`, rawPost);
-                    return;
-                }
+        if (error) throw error;
+        if (!posts) return { data: [], total: 0 };
 
-                const gift = giftMap[rawPost.giftId];
-                if (!gift) {
-                    console.warn(`Invalid giftId ${rawPost.giftId} for post ${childSnapshot.key}`);
-                    return;
-                }
+        const formattedPosts: Post[] = posts.map(post => {
+            const gift = giftMap[post.gift_id];
+            if (!gift) {
+                console.warn(`Invalid giftId ${post.gift_id} for post ${post.id}`);
+                return null;
+            }
 
-                const post: Post = {
-                    id: childSnapshot.key as string,
-                    name: rawPost.name,
-                    comment: rawPost.comment,
-                    giftId: gift.id,
-                    createdAt: rawPost.createdAt,
-                    gift,
-                };
-                posts.push(post);
-            });
-        }
-
-        posts.sort((a, b) => {
-            if (a.createdAt === null && b.createdAt === null) return 0;
-            if (a.createdAt === null) return 1;
-            if (b.createdAt === null) return -1;
-            return b.createdAt - a.createdAt;
-        });
+            return {
+                id: post.id,
+                name: post.name,
+                comment: post.comment,
+                giftId: gift.id,
+                createdAt: post.created_at,
+                gift,
+            };
+        }).filter((post): post is Post => post !== null);
 
         return {
-            data: posts,
-            total: posts.length,
+            data: formattedPosts,
+            total: formattedPosts.length,
         };
     } catch (error) {
         console.error('Error getting posts:', error);
