@@ -104,7 +104,7 @@ export default function Page() {
       name: "unknown",
       url: "",
       imgURL: "/img/banner/Unknown.png",
-      order: 6
+      order: 7
     }
   ]
 
