@@ -2,10 +2,10 @@
 const nextConfig = {
   output: 'export', 
   reactStrictMode: true,
+  // Headers config won't work with static export, but keeping for development
   async headers() {
     return [
       {
-        // Apply the header to all routes in your application
         source: '/:path*',
         headers: [
           {
@@ -19,8 +19,6 @@ const nextConfig = {
   webpack: (config) => {
     config.experiments = {
       asyncWebAssembly: true,
-      // or use syncWebAssembly for synchronous WebAssembly support
-      // syncWebAssembly: true,
     };
     return config;
   },
