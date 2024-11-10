@@ -2,12 +2,12 @@
 const nextConfig = {
   output: 'export',
   reactStrictMode: true,
-  
+
   // Headers config - will only work through Cloudflare Pages settings
   async headers() {
     return [
       {
-        source: '/:path*',
+        source: '/(.*)',
         headers: [
           {
             key: 'ngrok-skip-browser-warning',
@@ -17,7 +17,7 @@ const nextConfig = {
       }
     ];
   },
-  
+
   // WebAssembly configuration
   webpack: (config) => {
     config.experiments = {
@@ -40,7 +40,7 @@ const nextConfig = {
 
   // Static export configurations
   trailingSlash: true,
-  
+
   // Disable powered by header
   poweredByHeader: false,
 
