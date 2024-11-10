@@ -150,10 +150,10 @@ const uuid = () => {
   })
 }
 
-const writePost = async (name, comment, giftId) => {
-  const posts = loadPosts()
-  const gift = gifts.find(g => g.order.toString() === giftId)
-  
+const writePost = async (name: string, comment: string, giftId: string) => {
+  const posts = loadPosts();
+  const gift = gifts.find(g => g.order.toString() === giftId);
+
   const newPost = {
     id: uuid(),
     name,
@@ -166,13 +166,13 @@ const writePost = async (name, comment, giftId) => {
       borderColor: gift.borderColor,
       imgURL: gift.imgURL
     }
-  }
+  };
 
-  posts.data.unshift(newPost)
-  posts.total = posts.data.length
-  savePosts(posts)
-  return posts
-}
+  posts.data.unshift(newPost);
+  posts.total = posts.data.length;
+  savePosts(posts);
+  return posts;
+};
 
 export default function Page() {
   const [lastSwap, setLastSwap] = useState(DateTime.now())
