@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 import { initializeDb } from './db/config';
 
 export const config = {
-  matcher: '/*',
+  matcher: '/:path*',  // This is the correct syntax for matching all routes
 };
 
 export function middleware(request: NextRequest) {
