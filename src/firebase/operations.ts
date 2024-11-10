@@ -153,7 +153,7 @@ export const getPosts = async (): Promise<{ data: Post[]; total: number }> => {
                 createdAt: post.created_at,
                 gift,
             };
-        }).filter((post): post is Post => post !== null);
+        }).filter((post: Post | null): post is Post => post !== null);
 
         return {
             data: formattedPosts,
