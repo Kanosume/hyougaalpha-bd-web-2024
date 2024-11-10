@@ -185,9 +185,9 @@ export default function Page() {
   const [isModalOpen, setModalOpen] = useState(false)
   const [selectedImageId, setSelectedImageId] = useState(null)
   const [userName, setUserName] = useState('')
-  const userNameRef = useRef(null)
+  const userNameRef = useRef<HTMLTextAreaElement>(null);
   const [userComment, setUserComment] = useState('')
-  const userCommentRef = useRef(null)
+  const userCommentRef = useRef<HTMLTextAreaElement>(null);
   const pageSize = 10
   const swapTime = 5
   const [page, setPage] = useState(1)
