@@ -1,133 +1,263 @@
 import { Button, CircularProgress, Divider, Fade, Grow, IconButton } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { Alegreya_Sans_SC, Old_Standard_TT } from 'next/font/google'
-import useSWR from 'swr';
-import { DateTime } from 'luxon';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import Link from 'next/link';
-import YouTubeIcon from '@mui/icons-material/YouTube';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBluesky, faFacebook, faInstagram, faTwitch } from '@fortawesome/free-brands-svg-icons';
+import { DateTime } from 'luxon'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import RefreshIcon from '@mui/icons-material/Refresh'
+import Link from 'next/link'
+import YouTubeIcon from '@mui/icons-material/YouTube'
+import TwitterIcon from '@mui/icons-material/Twitter'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBluesky, faFacebook, faInstagram, faTwitch } from '@fortawesome/free-brands-svg-icons'
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
-import { getPosts, writePost } from '@/db/operations';
-// import { Logo } from '@/svg/Logo';
-
-import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import { LeftNav } from '@/svg/LeftNav';
-import { BadgeBody } from '@/svg/badge/body';
-import { CocoaBottom } from '@/svg/badge/bottom/cocoaB';
-import { CocoaTop } from '@/svg/badge/top/cocoaT';
-import { MomijiTop } from '@/svg/badge/top/momijiT';
-import { MomijiBottom } from '@/svg/badge/bottom/momijiB';
-import { StarTop } from '@/svg/badge/top/starT';
-import { StarBottom } from '@/svg/badge/bottom/starB';
-import { PorkTop } from '@/svg/badge/top/porkT';
-import { PorkBottom } from '@/svg/badge/bottom/porkB';
-import { CpuTop } from '@/svg/badge/top/cpuT';
-import { CpuBottom } from '@/svg/badge/bottom/cpuB';
-
-
-//
+import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import { LeftNav } from '@/svg/LeftNav'
+import { BadgeBody } from '@/svg/badge/body'
+import { CocoaBottom } from '@/svg/badge/bottom/cocoaB'
+import { CocoaTop } from '@/svg/badge/top/cocoaT'
+import { MomijiTop } from '@/svg/badge/top/momijiT'
+import { MomijiBottom } from '@/svg/badge/bottom/momijiB'
+import { StarTop } from '@/svg/badge/top/starT'
+import { StarBottom } from '@/svg/badge/bottom/starB'
+import { PorkTop } from '@/svg/badge/top/porkT'
+import { PorkBottom } from '@/svg/badge/bottom/porkB'
+import { CpuTop } from '@/svg/badge/top/cpuT'
+import { CpuBottom } from '@/svg/badge/bottom/cpuB'
 
 const oldStandard = Old_Standard_TT({ weight: '400', subsets: ['latin'] })
 const alegreya = Alegreya_Sans_SC({ weight: '400', subsets: ['latin'] })
 
+const initialData = {
+  total: 0,
+  data: []
+}
+
+const gifts = [
+  {
+    id: "ba8a1955-5f71-4cde-9886-62fc829784a1",
+    name: "cocoa",
+    desc: "โกโก้ร้อนช่วยให้ร่างกายอุ่น แต่รอยยิ้มคุณช่วยให้อุ่นใจ",
+    imgURL: "/img/Sticker/Cocoa.png",
+    bgColorCode: "white",
+    borderColor: "#B44137",
+    order: 1
+  },
+  {
+    id: "04fc6ec8-abc6-4328-9dce-66aaf8516c64",
+    name: "momiji",
+    desc: "ใบไม้อาจมีเปลี่ยนสี แต่คำว่า 'รัก' ที่สกม.มีไม่เคยเปลี่ยนไป",
+    imgURL: "/img/Sticker/Manju.png",
+    bgColorCode: "white",
+    borderColor: "#AA613F",
+    order: 2
+  },
+  {
+    id: "32671e3c-59fb-4972-8926-18f5751efe16",
+    name: "star",
+    desc: "คืนที่ดาวเต็มฟ้า ฉันจินตนาการเป็นหน้าเธอ",
+    imgURL: "/img/Sticker/Star.png",
+    bgColorCode: "white",
+    borderColor: "#CFBB41",
+    order: 3
+  },
+  {
+    id: "46fd5699-ccb1-4882-b5ad-469b8491747a",
+    name: "pork",
+    desc: "หมูปิ้งร้อนๆก็ยังไม่ฮ็อตเท่าพี่",
+    imgURL: "/img/Sticker/Grilled pork.png",
+    bgColorCode: "white",
+    borderColor: "#2A5421",
+    order: 4
+  },
+  {
+    id: "6916f01c-2287-4637-aa57-65b7886dc368",
+    name: "cpu",
+    desc: "คุณมีงบเท่าไหร่ แลกหัวใจคุณแทนได้ไหมคะ",
+    imgURL: "/img/Sticker/PC RGB.png",
+    bgColorCode: "white",
+    borderColor: "#5A7397",
+    order: 5
+  }
+]
+
+const banners = [
+  {
+    id: "dee279c3-351e-46a2-b20b-77315dcfade0",
+    name: "hyouga-keychain",
+    url: "https://shop.realic.net/products/2024-november-birthday-event?variant=49287100432664",
+    imgURL: "/img/banner/birthday-good.png",
+    order: 1
+  },
+  {
+    id: "dee279c3-351e-46a2-b20b-77315dcfade0",
+    name: "hyouvember",
+    url: "https://x.com/search?q=%23%E0%B9%80%E0%B8%AE%E0%B8%B5%E0%B8%A2%E0%B8%A7%E0%B9%80%E0%B8%A7%E0%B8%A1%E0%B9%80%E0%B8%9A%E0%B8%AD%E0%B8%A3%E0%B9%8C&src=typeahead_click",
+    imgURL: "/img/banner/hyouvember.jpg",
+    order: 2
+  },
+  {
+    id: "aa90961a-cfb0-422c-b7ea-50474a71235e",
+    name: "cafe-project",
+    url: "https://x.com/CNubdao12251",
+    imgURL: "/img/banner/cafe.png",
+    order: 3
+  },
+  {
+    id: "5fae0719-5365-4baa-bc3e-4a8cbe5cb7e4",
+    name: "blooming-cat",
+    url: "https://x.com/BloomingCat__",
+    imgURL: "/img/banner/BloomingCat_Banner.png",
+    order: 4
+  },
+  {
+    id: "6f82c72d-4598-4de3-9f45-1cdb83f65892",
+    name: "game",
+    url: "https://play.unity.com/en/games/742ac3a9-3679-4a94-8327-6ccf7018986f/tape-the-cats",
+    imgURL: "/img/banner/TapeTheCats.png",
+    order: 5
+  },
+  {
+    id: "8d3ab3b5-769d-4ab5-b06e-073bf8f2ad3a",
+    name: "hagaalphyou2211",
+    url: "https://x.com/hagaalphyou2211",
+    imgURL: "/img/banner/CK-banner.png",
+    order: 6
+  },
+  {
+    id: "8d3ab3b5-769d-4ab5-b06e-003bf8f2ad3a",
+    name: "unknown",
+    url: "",
+    imgURL: "/img/banner/Unknown.png",
+    order: 7
+  }
+]
+
+const loadPosts = () => {
+  const saved = localStorage.getItem('posts')
+  return saved ? JSON.parse(saved) : initialData
+}
+
+const savePosts = (posts) => {
+  localStorage.setItem('posts', JSON.stringify(posts))
+}
+
+const uuid = () => {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+    const r = (Math.random() * 16) | 0
+    const v = c === "x" ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+}
+
+const writePost = async (name, comment, giftId) => {
+  const posts = loadPosts()
+  const gift = gifts.find(g => g.order.toString() === giftId)
+  
+  const newPost = {
+    id: uuid(),
+    name,
+    comment,
+    createdAt: Date.now(),
+    giftId,
+    gift: {
+      name: gift.name,
+      bgColorCode: gift.bgColorCode,
+      borderColor: gift.borderColor,
+      imgURL: gift.imgURL
+    }
+  }
+
+  posts.data.unshift(newPost)
+  posts.total = posts.data.length
+  savePosts(posts)
+  return posts
+}
+
 export default function Page() {
-  const [lastSwap, setLastSwap] = useState<DateTime>(DateTime.now())
-  const [now, setNow] = useState<DateTime>(DateTime.now())
+  const [lastSwap, setLastSwap] = useState(DateTime.now())
+  const [now, setNow] = useState(DateTime.now())
   const [openEye, setOpenEye] = useState(true)
-
-  // new for writing box
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
-  const [userName, setUserName] = useState('');
-  const userNameRef = useRef<HTMLTextAreaElement>(null);
-  const [userComment, setUserComment] = useState('');
-  const userCommentRef = useRef<HTMLTextAreaElement>(null);
-
+  const [isModalOpen, setModalOpen] = useState(false)
+  const [selectedImageId, setSelectedImageId] = useState(null)
+  const [userName, setUserName] = useState('')
+  const userNameRef = useRef(null)
+  const [userComment, setUserComment] = useState('')
+  const userCommentRef = useRef(null)
   const pageSize = 10
   const swapTime = 5
   const [page, setPage] = useState(1)
-  const [dimensions, setDimensions] = useState({
-    width: 0,
-    height: 0,
-  });
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+  const [postData, setPostData] = useState(null)
+  const [postError, setPostError] = useState(null)
+  const [postIsLoading, setPostIsLoading] = useState(true)
+  const swiperRef = useRef(null)
 
-  const banners = [
-    {
-      id: "dee279c3-351e-46a2-b20b-77315dcfade0",
-      name: "hyouga-keychain",
-      url: "https://shop.realic.net/products/2024-november-birthday-event?variant=49287100432664",
-      imgURL: "/img/banner/birthday-good.png",
-      order: 1
-    },
-    {
-      id: "dee279c3-351e-46a2-b20b-77315dcfade0",
-      name: "hyouvember",
-      url: "https://x.com/search?q=%23%E0%B9%80%E0%B8%AE%E0%B8%B5%E0%B8%A2%E0%B8%A7%E0%B9%80%E0%B8%A7%E0%B8%A1%E0%B9%80%E0%B8%9A%E0%B8%AD%E0%B8%A3%E0%B9%8C&src=typeahead_click",
-      imgURL: "/img/banner/hyouvember.jpg",
-      order: 2
-    },
-    {
-      id: "aa90961a-cfb0-422c-b7ea-50474a71235e",
-      name: "cafe-project",
-      url: "https://x.com/CNubdao12251",
-      imgURL: "/img/banner/cafe.png",
-      order: 3
-    },
-    {
-      id: "5fae0719-5365-4baa-bc3e-4a8cbe5cb7e4",
-      name: "blooming-cat",
-      url: "https://x.com/BloomingCat__",
-      imgURL: "/img/banner/BloomingCat_Banner.png",
-      order: 4
-    },
-    {
-      id: "6f82c72d-4598-4de3-9f45-1cdb83f65892",
-      name: "game",
-      url: "https://play.unity.com/en/games/742ac3a9-3679-4a94-8327-6ccf7018986f/tape-the-cats",
-      imgURL: "/img/banner/TapeTheCats.png",
-      order: 5
-    },
-    {
-      id: "8d3ab3b5-769d-4ab5-b06e-073bf8f2ad3a",
-      name: "hagaalphyou2211",
-      url: "https://x.com/hagaalphyou2211",
-      imgURL: "/img/banner/CK-banner.png",
-      order: 6
-    },
-    {
-      id: "8d3ab3b5-769d-4ab5-b06e-003bf8f2ad3a",
-      name: "unknown",
-      url: "",
-      imgURL: "/img/banner/Unknown.png",
-      order: 7
+  const handleOpenModal = () => {
+    if (isModalOpen) {
+      handleCloseModal()
+    } else {
+      setModalOpen(true)
     }
-  ]
+  }
+
+  const handleCloseModal = () => {
+    setModalOpen(false)
+    setUserName('')
+    setUserComment('')
+    setSelectedImageId(null)
+  }
+
+  const handleSubmit = async () => {
+    if (userName === "" && userNameRef.current) {
+      userNameRef.current.focus()
+      return
+    }
+    if (userComment === "" && userCommentRef.current) {
+      userCommentRef.current.focus()
+      return
+    }
+    if (!selectedImageId) {
+      return
+    }
+
+    try {
+      const updatedPosts = await writePost(userName, userComment, selectedImageId.toString())
+      setPostData(updatedPosts)
+      handleCloseModal()
+    } catch (error) {
+      console.error('Error submitting post:', error)
+    }
+  }
 
   const handleResize = () => {
     setDimensions({
       width: window.innerWidth,
       height: window.innerHeight,
-    });
+    })
   }
 
   useEffect(() => {
-    // Update Every Second
     const interval = setInterval(() => {
       setNow(DateTime.now())
     }, 1000)
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize)
     handleResize()
+
+    try {
+      const data = loadPosts()
+      setPostData(data)
+      setPostIsLoading(false)
+    } catch (error) {
+      setPostError(error)
+      setPostIsLoading(false)
+    }
 
     return () => {
       window.removeEventListener('resize', handleResize)
       if (interval) {
-        clearInterval(interval);
+        clearInterval(interval)
       }
     }
   }, [])
@@ -141,125 +271,6 @@ export default function Page() {
       setOpenEye(!openEye)
     }
   }, [now])
-
-  // new for writing box
-  const handleOpenModal = () => {
-    if (isModalOpen) {
-      handleCloseModal();
-    }
-    else {
-      setModalOpen(true);
-    }
-  };
-
-  const handleCloseModal = () => {
-    setModalOpen(false);
-    setUserName('');
-    setUserComment('');
-    setSelectedImageId(null);
-  };
-
-  const uuid = () => {
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-      /[xy]/g,
-      function (c) {
-        const r = (Math.random() * 16) | 0,
-          v = c === "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      }
-    );
-  };
-
-  const handleSubmit = async () => {
-    if (userName === "" && userNameRef.current) {
-      userNameRef.current.focus();
-      return;
-    }
-    if (userComment === "" && userCommentRef.current) {
-      userCommentRef.current.focus();
-      return;
-    }
-    if (!selectedImageId) {
-      return;
-    }
-
-    try {
-      await writePost(userName, userComment, selectedImageId.toString());
-      await postMutate(); // Refresh the posts list
-      handleCloseModal();
-    } catch (error) {
-      console.error('Error submitting post:', error);
-      // You might want to show an error message to the user here
-    }
-  };
-
-  const gifts = [
-    {
-      id: "ba8a1955-5f71-4cde-9886-62fc829784a1",
-      name: "cocoa",
-      desc: "โกโก้ร้อนช่วยให้ร่างกายอุ่น แต่รอยยิ้มคุณช่วยให้อุ่นใจ",
-      imgURL:
-        "/img/Sticker/Cocoa.png",
-      bgColorCode: "white",
-      borderColor: "#B44137",
-      order: 1
-    },
-    {
-      id: "04fc6ec8-abc6-4328-9dce-66aaf8516c64",
-      name: "momiji",
-      desc: "ใบไม้อาจมีเปลี่ยนสี แต่คำว่า ‘รัก’ ที่สกม.มีไม่เคยเปลี่ยนไป",
-      imgURL:
-        "/img/Sticker/Manju.png",
-      bgColorCode: "white",
-      borderColor: "#AA613F",
-      order: 2
-    },
-    {
-      id: "32671e3c-59fb-4972-8926-18f5751efe16",
-      name: "star",
-      desc: "คืนที่ดาวเต็มฟ้า ฉันจินตนาการเป็นหน้าเธอ",
-      imgURL:
-        "/img/Sticker/Star.png",
-      bgColorCode: "white",
-      borderColor: "#CFBB41",
-      order: 3
-    },
-    {
-      id: "46fd5699-ccb1-4882-b5ad-469b8491747a",
-      name: "pork",
-      desc: "หมูปิ้งร้อนๆก็ยังไม่ฮ็อตเท่าพี่",
-      imgURL:
-        "/img/Sticker/Grilled pork.png",
-      bgColorCode: "white",
-      borderColor: "#2A5421",
-      order: 4
-    },
-    {
-      id: "6916f01c-2287-4637-aa57-65b7886dc368",
-      name: "cpu",
-      desc: "คุณมีงบเท่าไหร่ แลกหัวใจคุณแทนได้ไหมคะ",
-      imgURL:
-        "/img/Sticker/PC RGB.png",
-      bgColorCode: "white",
-      borderColor: "#5A7397",
-      order: 5
-    },
-  ];
-
-
-  //end new
-  const swiperRef = useRef<SwiperClass | null>(null);
-
-  const { data: postData, error: postError, isLoading: postIsLoading, isValidating: postIsValidating, mutate: postMutate } = useSWR('/posts', async () => {
-    setPage(0);
-    const result = await getPosts();
-    setPage(1);
-    return result;
-  }, {
-    revalidateOnMount: true,
-    revalidateOnFocus: false
-  });
-
 
   return (
     <div className="flex flex-col w-full items-center">
