@@ -252,7 +252,7 @@ export default function Page() {
   // Refs
   const userNameRef = useRef<HTMLInputElement>(null);
   const userCommentRef = useRef<HTMLTextAreaElement>(null);
-  const swiperRef = useRef<SwiperClass>(null);
+  const swiperRef = useRef<SwiperClass | null>(null);
 
   // Constants
   const pageSize = 10;
@@ -416,53 +416,43 @@ export default function Page() {
               <LeftNav className="md:w-16 md:h-16 min-[425px]:w-12 w-10 min-[425px]:h-12 h-10 z-[1]" />
             </div>
           </IconButton>
-          <Swiper
-            onSwiper={(swiper: SwiperClass) => {
-              swiperRef.current = swiper;
-            }}
-            slidesPerView={dimensions.width >= 640 ? 3 : 1}
-            spaceBetween={0}
-            centeredSlides={true}
-          >
-            {banners.map((banner) => (
-              <SwiperSlide key={banner.id} className="aspect-video ">
-                {({ isActive, isPrev, isNext }) => (
-                  <div>
-                    {banner.url && (
-                      <Link
-                        className={`${isActive ? "" : "brightness-50"} ${isPrev || isNext || isActive
-                            ? "opacity-100"
-                            : "opacity-0"
-                          } transition`}
-                        href={banner.url}
-                        target="_blank"
-                      >
-                        <img
-                          src={banner.imgURL}
-                          className={`transition ease-linear sm:rounded-[50px] w-full object-cover aspect-video ${isActive ? "" : "scale-75"
-                            }`}
-                        />
-                      </Link>
-                    )}
-                    {!banner.url && (
-                      <div
-                        className={`${isActive ? "" : "brightness-50"} ${isPrev || isNext || isActive
-                            ? "opacity-100"
-                            : "opacity-0"
-                          } transition`}
-                      >
-                        <img
-                          src={banner.imgURL}
-                          className={`transition ease-linear sm:rounded-[50px] w-full object-cover aspect-video ${isActive ? "" : "scale-75"
-                            }`}
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
-              </SwiperSlide>
-            ))}
-          </Swiper>
+<Swiper
+  onSwiper={(swiper: SwiperClass) => {
+    swiperRef.current = swiper;
+  }}
+  slidesPerView={dimensions.width >= 640 ? 3 : 1}
+  spaceBetween={0}
+  centeredSlides={true}
+>
+  {banners.map((banner) => (
+    <SwiperSlide key={banner.id} className="aspect-video">
+      {({ isActive, isPrev, isNext }) => (
+        <div>
+          {banner.url && (
+            <Link
+              className={`${isActive ? "" : "brightness-50"} ${isPrev || isNext || isActive ? "opacity-100" : "opacity-0"} transition`}
+              href={banner.url}
+              target="_blank"
+            >
+              <img
+                src={banner.imgURL}
+                className={`transition ease-linear sm:rounded-[50px] w-full object-cover aspect-video ${isActive ? "" : "scale-75"}`}
+              />
+            </Link>
+          )}
+          {!banner.url && (
+            <div className={`${isActive ? "" : "brightness-50"} ${isPrev || isNext || isActive ? "opacity-100" : "opacity-0"} transition`}>
+              <img
+                src={banner.imgURL}
+                className={`transition ease-linear sm:rounded-[50px] w-full object-cover aspect-video ${isActive ? "" : "scale-75"}`}
+              />
+            </div>
+          )}
+        </div>
+      )}
+    </SwiperSlide>
+  ))}
+</Swiper>
         </div>
         {/* button for writing */}
         {!isModalOpen && (
