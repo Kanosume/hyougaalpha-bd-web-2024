@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Provide fallback values for static build
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://your-project-id.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key';
+const supabaseUrl = process.env.SUPABASE_URL || 'https://your-project-id.supabase.co';
+const supabaseAnonKey = process.env.SUPABASE_KEY || 'your-anon-key';
 
 // Create client but don't throw error during build
 const createSupabaseClient = () => {
