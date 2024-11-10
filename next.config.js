@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone', // Changed from 'export' to 'standalone' for Cloudflare Pages
+  output: 'export', // Changed to 'export' for static site deployment
   reactStrictMode: true,
   
-  // Headers config won't work with static export, but keeping for development
+  // Headers config won't work with static export
   async headers() {
     return [
       {
@@ -26,9 +26,10 @@ const nextConfig = {
     return config;
   },
 
-  // Add images configuration for Cloudflare Pages
+  // Images configuration
   images: {
-    unoptimized: true, // Required for static export
+    unoptimized: true,
+    domains: ['**'], // Allow all domains
     remotePatterns: [
       {
         protocol: 'https',
@@ -36,6 +37,12 @@ const nextConfig = {
       },
     ],
   },
+
+  // Add base path if needed
+  // basePath: '',
+
+  // Disable server-side features since we're doing static export
+  trailingSlash: true,
 };
 
 module.exports = nextConfig;
