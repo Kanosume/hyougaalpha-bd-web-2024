@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // Changed to 'export' for static site deployment
+  output: 'export',
   reactStrictMode: true,
   
-  // Headers config won't work with static export
+  // Headers config - will only work through Cloudflare Pages settings
   async headers() {
     return [
       {
@@ -18,7 +18,7 @@ const nextConfig = {
     ];
   },
   
-  // Keep WebAssembly config
+  // WebAssembly configuration
   webpack: (config) => {
     config.experiments = {
       asyncWebAssembly: true,
@@ -29,7 +29,7 @@ const nextConfig = {
   // Images configuration
   images: {
     unoptimized: true,
-    domains: ['**'], // Allow all domains
+    domains: ['*'], 
     remotePatterns: [
       {
         protocol: 'https',
@@ -38,11 +38,45 @@ const nextConfig = {
     ],
   },
 
-  // Add base path if needed
-  // basePath: '',
-
-  // Disable server-side features since we're doing static export
+  // Static export configurations
   trailingSlash: true,
+  
+  // Disable powered by header
+  poweredByHeader: false,
+
+  // Customize the build directory
+  distDir: '.next',
+
+  // Enable compression
+  compress: true,
+
+  // Generate ETags for better caching
+  generateEtags: true,
+
+  // Dev specific configs
+  devIndicators: {
+    buildActivity: true,
+    buildActivityPosition: 'bottom-right',
+  },
+
+  // Strict mode for better development
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+
+  // Environment configuration
+  env: {
+    customKey: 'customValue',
+  },
+
+  // Enable SWC minification
+  swcMinify: true,
+
+  // Compiler options
+  compiler: {
+    // Remove console.log in production
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
 };
 
 module.exports = nextConfig;
